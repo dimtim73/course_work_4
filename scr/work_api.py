@@ -12,22 +12,27 @@ class ABCEngine(ABC):
         pass
 
 
-"""Класс для работы с API HeadHunter"""
+
 class HH_API(ABCEngine):
+    """Класс для работы с API HeadHunter"""
+
     def get_vacancies(self, query: str):
-        options = {'name':'query'}
+        options = {'text': f'NAME:{query}'}
         url = 'https://api.hh.ru/vacancies'
         response = requests.get(url, options)
         vacancies = response.json()
+
         return vacancies
 
- """Класс для получения вакансий с SuperJob"""
 
-SUPERJOB_API_KEY = os.getenv('SUPERJOB_API_KEY')
+
+
 class SJ_API(ABCEngine):
+    """Класс для получения вакансий с SuperJob"""
 
 
     def get_vacancies(self, query: str):
+        SUPERJOB_API_KEY = os.getenv('SUPERJOB_API_KEY')
         options = {'name': query}
         url = "https://api.superjob.ru/2.0/vacancies/"
         headers = {"X-Api-App-Id": SUPERJOB_API_KEY}
@@ -36,28 +41,22 @@ class SJ_API(ABCEngine):
         return vacancies
 
 
+
+
+
+
+
+class Vacancy():
     """Класс для работы с вакансиями"""
-class Vacancy:
 
     all_vacancies = []
 
-    def __init__(self, title, salary, description, company, city):
-        self.title = title
+    def __init__(self, name, salary, description, company):
+        self.name = name
         self.salary = salary
         self.description = description
         self.company = company
-        self.city = city
+        self.all_vacancies.append({'name': self.name, 'salary': self.salary , 'description': self.description, 'company': self.company})
 
-
-    """Метод для создания экземпляров классов вакансий с данными из HeadHunter"""
-    @classmethod
-    def vacancies_from_hh(cls, data):
-        pass
-
-
-    """Метод для создания экземпляров классов вакансий с данными из SuperJob"""
-    @classmethod
-    def vacancies_from_sj(cls, data):
-        pass
 
 
